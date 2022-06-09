@@ -21,15 +21,27 @@ public class SumMultipleThreads {
 		 * sumRunners.add(new SumMultipleThreads(7000001,8000000));
 		 * sumRunners.add(new SumMultipleThreads(8000001,9000000));
 		 * sumRunners.add(new SumMultipleThreads(9000001,10000000));*/
-		for(long i=0; i<to/1000000; i++) {
+		
+		for(long i = 0; i < to / 1000000; i++) {
 			SumRunner currentRunner = new SumRunner((i*1000000)+1, (i+1)*1000000);
 			sumRunners.add(currentRunner);
 			
 			Thread thread = new Thread(currentRunner);
 			thread.start();
+			
 			threadsForSubSum.add(thread);
 			System.out.println("Thread-" + i + " started!");
 		}
+		
+		for(int j = 0; j < threadsForSubSum.size(); j++) {
+			
+			try {
+				threadsForSubSum.get(j).join();
+			}catch(Exception e){System.out.println(e);}
+			
+		}
+		
+
 
 		long grandTotal = 0;
 		for(SumRunner runner:sumRunners) {
